@@ -1,2 +1,5 @@
 image:
   file: .gitpod.dockerfile
+
+tasks:
+  - command: wget  https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks && chmod +x winetricks

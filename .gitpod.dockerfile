@@ -10,3 +10,4 @@ RUN apt-get -y install libfreetype6 libfreetype6:i386 wine
 
 
 USER gitpod
+
