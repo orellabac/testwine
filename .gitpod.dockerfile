@@ -13,6 +13,6 @@ RUN apt-add-repository 'deb http://dl.winehq.org/wine-builds/ubuntu/ bionic main
 RUN wget -qO- https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key | sudo apt-key add -
 RUN sh -c 'echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./" > /etc/apt/sources.list.d/obs.list'
 RUN apt update
-RUN apt-get install --install-recommends winehq-stable
+RUN apt-get install -y --install-recommends winehq-stable
 USER gitpod
 
