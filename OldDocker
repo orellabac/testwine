@@ -55,28 +55,6 @@ RUN mkdir -p $MAVEN_HOME \
     && curl -fsSL https://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
         | tar -xzvC $MAVEN_HOME --strip-components=1
 
-### PHP ###
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-        composer \
-        php \
-        php-all-dev \
-        php-ctype \
-        php-curl \
-        php-date \
-        php-gd \
-        php-gettext \
-        php-intl \
-        php-json \
-        php-mbstring \
-        php-mysql \
-        php-net-ftp \
-        php-pgsql \
-        php-sqlite3 \
-        php-tokenizer \
-        php-xml \
-        php-zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
-# PHP language server is installed by theia-php-extension
 
 ### Yarn ###
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
@@ -88,33 +66,6 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
 RUN sudo echo "Running 'sudo' for Gitpod: success"
-
-### Go ###
-ENV GO_VERSION=1.11.2 \
-    GOPATH=$HOME/go-packages \
-    GOROOT=$HOME/go
-ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
-RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv \
-    && go get -u -v \
-        github.com/acroca/go-symbols \
-        github.com/cweill/gotests/... \
-        github.com/davidrjenni/reftools/cmd/fillstruct \
-        github.com/fatih/gomodifytags \
-        github.com/haya14busa/goplay/cmd/goplay \
-        github.com/josharian/impl \
-        github.com/nsf/gocode \
-        github.com/ramya-rao-a/go-outline \
-        github.com/rogpeppe/godef \
-        github.com/uudashr/gopkgs/cmd/gopkgs \
-        github.com/zmb3/gogetdoc \
-        golang.org/x/lint/golint \
-        golang.org/x/tools/cmd/godoc \
-        golang.org/x/tools/cmd/gorename \
-        golang.org/x/tools/cmd/guru \
-        sourcegraph.com/sqs/goreturns
-# user Go packages
-ENV GOPATH=/workspace:$GOPATH \
-    PATH=/workspace/bin:$PATH
 
 ### Node.js ###
 ARG NODE_VERSION=8.14.0
@@ -135,24 +86,6 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv global 3.6.6 \
     && pip install virtualenv pipenv python-language-server[all]==0.19.0 \
     && rm -rf /tmp/*
-
-### Ruby ###
-ENV RUBY_VERSION=2.6.0
-RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
-    && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
-    && curl -fsSL https://get.rvm.io | bash -s stable \
-    && bash -lc " \
-        rvm requirements \
-        && rvm install $RUBY_VERSION \
-        && rvm use $RUBY_VERSION --default \
-        && rvm rubygems current \
-        && gem install bundler --no-document"
-
-### Rust ###
-RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup update \
-    && .cargo/bin/rustup component add rls-preview rust-analysis rust-src \
-    && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null
 
 ### checks ###
 # no root-owned files in the home directory
